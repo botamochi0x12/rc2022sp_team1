@@ -1,0 +1,27 @@
+{
+    "recommendations": [
+        "atishay-jain.all-autocomplete",
+        "wmaurer.change-case",
+        "streetsidesoftware.code-spell-checker",
+        "fabiospampinato.vscode-diff",
+        "editorconfig.editorconfig",
+        "nepaul.editorconfiggenerator",
+        "sleistner.vscode-fileutils",
+        "mhutchie.git-graph",
+        "hashhar.gitattributes",
+        "omartawfik.github-actions-vscode",
+        "codezombiech.gitignore",
+        "seatonjiang.gitmoji-vscode",
+        "benjaminadk.emojis4git",
+        "ms-vsliveshare.vsliveshare",
+        "ms-vsliveshare.vsliveshare-audio",
+        "ms-vsliveshare.vsliveshare-pack",
+        "sandcastle.vscode-open",
+        "ryu1kn.partial-diff",
+        "kukushi.pasteurl",
+        "christian-kohler.path-intellisense",
+        "rebornix.ruby",
+        "castwide.solargraph",
+        "masakit.zenkaku-hankaku"
+    ]
+}
