@@ -1,0 +1,14 @@
+version: "0.2"
+language: en,ja
+ignorePaths: []
+dictionaryDefinitions: []
+dictionaries: []
+words:
+  - Shimane
+  - Matsue
+  - Izumo
+  - Iwami
+  - Shimanekko
+  - Mikopi
+ignoreWords: []
+import: []
