@@ -36,5 +36,12 @@ module Directors
 		def transition_to_next_director
 			self.current_director = self.next_director
 		end
+
+        def render
+            self.renderer.render(
+                self.scene,
+                self.camera
+            )
+        end
 	end
 end

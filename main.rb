@@ -30,25 +30,5 @@ renderer.window.run do
 	# １フレーム分、最新のディレクターオブジェクトを進行させる
 	director.play
 
-    # TODO: Implement it in an onject-oriented programming
-    if director.class.name == "Directors::TunnelStageDirector"
-        director.skybox_camera.quaternion.copy(director.camera.get_world_quaternion)
-
-        renderer.clear
-        renderer.render(
-            director.skybox_scene,
-            director.skybox_camera
-        )
-        renderer.clear_depth
-        renderer.render(
-            director.scene,
-            director.camera
-        )
-    else
-        # 現在のディレクターオブジェクトが保持するシーンを、同じく現在のディレクターオブジェクトが持つカメラでレンダリング
-        renderer.render(
-            director.scene,
-            director.camera
-        )
-    end
+    director.render
 end
