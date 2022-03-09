@@ -33,6 +33,13 @@ class MeshFactory
 		Mittsu::Mesh.new(geometry, material)
 	end
 
+    # プレイヤーが通る管の生成
+    def self.create_tube
+        geometry = Mittsu::TorusGeometry.new(1, 0.4, 8, 6, Math::PI * 1.1)  # TODO
+        material = Mittsu::MeshBasicMaterial.new(color: 0xff0000)  # TODO
+        Mittsu::Mesh.new(geometry, material)
+    end
+
 	# 汎用マテリアル生成メソッド
 	def self.generate_material(type, color, map, normal_map)
 		mat = nil
