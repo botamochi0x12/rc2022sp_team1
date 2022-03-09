@@ -2,7 +2,7 @@
 class Bullet
 	attr_accessor :mesh, :expired
 
-	SPEED = -0.05 # 弾丸の速度
+	SPEED = -0.2 # 弾丸の速度
 	FRAME_COUNT_UPPER_LIMIT = 3 * 60
 
 	# 初期化
