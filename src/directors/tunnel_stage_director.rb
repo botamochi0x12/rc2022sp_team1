@@ -64,6 +64,7 @@ module Directors
             @camera_rotate_x = 0.0
             @camera_rotate_y = 0.0
 
+            @score = Score.new screen_width, screen_height
         end
 
         # １フレーム分の進行処理
@@ -104,6 +105,8 @@ module Directors
             self.camera.rotate_x(-CAMERA_ROTATE_SPEED_X) if self.renderer.window.key_down?(GLFW_KEY_DOWN)
             self.camera.rotate_y(CAMERA_ROTATE_SPEED_Y) if self.renderer.window.key_down?(GLFW_KEY_LEFT)
             self.camera.rotate_y(-CAMERA_ROTATE_SPEED_Y) if self.renderer.window.key_down?(GLFW_KEY_RIGHT)
+
+            @score&.update_points
         end
 
         def postinitialize
@@ -161,6 +164,8 @@ module Directors
                 self.scene,
                 self.camera
             )
+
+            self.renderer.render(@score.scene, @score.camera) if @score
         end
 
         private
@@ -277,6 +282,7 @@ module Directors
                 distance = bullet.position.distance_to(enemy.position)
                 if distance < 0.2
                     puts "Hit!"
+                    @score&.points += 1
                     bullet.expired = true
                     enemy.expired = true
                 end
