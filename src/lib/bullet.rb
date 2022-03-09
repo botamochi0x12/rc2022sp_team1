@@ -2,13 +2,14 @@
 class Bullet
 	attr_accessor :mesh, :expired
 
-	SPEED = -0.05 # 弾丸の速度
+	SPEED = -0.2 # 弾丸の速度
 	FRAME_COUNT_UPPER_LIMIT = 3 * 60
 
 	# 初期化
 	# 進行方向を表す単位ベクトルを受領する
 	def initialize(forward_vector)
-		self.mesh = MeshFactory.create_bullet(r: 0.02, color: 0xff0000)
+		self.mesh = MeshFactory.create_bullet(r: 0.07, color: 0xff0000)
+		self.mesh.rotation.z = -0.25 * Math::PI
 		@forward_vector = forward_vector
 		@forwarded_frame_count = 0 # 何フレーム分進行したかを記憶するカウンタ
 		self.expired = false
