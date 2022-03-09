@@ -25,16 +25,16 @@ class Enemy
 		dy = rand(3)
 		case dx
 		when 1
-			self.mesh.position.x += 0.01
+			self.mesh.position.x += 0
 		when 2
-			self.mesh.position.x -= 0.01
+			self.mesh.position.x -= 0
 		end
 
 		case dy
 		when 1
-			self.mesh.position.y += 0.01
+			self.mesh.position.y += 0
 		when 2
-			self.mesh.position.y -= 0.01
+			self.mesh.position.y -= 0
 		end
 	end
 end
