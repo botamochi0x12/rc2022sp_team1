@@ -9,7 +9,7 @@ class MeshFactory
 			nil, #色
 			TextureFactory.create_texture_map("earth.png"),
 			nil)
-			
+
 		cylinder = Mittsu::Mesh.new(geometry, material)
 
 		geom1 = Mittsu::SphereGeometry.new(r, div_w, div_h, 0.0, Math::PI * 2, 0.0, Math::PI / 2)
@@ -18,20 +18,20 @@ class MeshFactory
 			nil, #色
 			TextureFactory.create_texture_map("earth.png"),nil)
 		harf1 = Mittsu::Mesh.new(geom1, mate1)
-	
+
 		harf1.position.y = 0.15
 
 		geom2 = Mittsu::SphereGeometry.new(r, div_w, div_h, 0.0, Math::PI * 2, 0.0, Math::PI / 2)
 		mate2 = generate_material(
 			:phong, #種類
 			nil, #色
-			TextureFactory.create_texture_map("earth.png"),nil)		
+			TextureFactory.create_texture_map("earth.png"),nil)
 		harf2 = Mittsu::Mesh.new(geom2, mate2)
 		harf2.position.y = -0.15
 		harf2.rotation.x = Math::PI
 
 		cylinder.add(harf1,harf2)
-		
+
 	end
 
 	# 敵キャラクタの生成
@@ -58,6 +58,13 @@ class MeshFactory
 			TextureFactory.create_normal_map("earth_normal.png"))
 		Mittsu::Mesh.new(geometry, material)
 	end
+
+    # プレイヤーが通る管の生成
+    def self.create_tube
+        geometry = Mittsu::TorusGeometry.new(1, 0.4, 8, 6, Math::PI * 1.1)  # TODO
+        material = Mittsu::MeshBasicMaterial.new(color: 0xff0000)  # TODO
+        Mittsu::Mesh.new(geometry, material)
+    end
 
 	# 汎用マテリアル生成メソッド
 	def self.generate_material(type, color, map, normal_map)
