@@ -77,7 +77,6 @@ module Directors
 				# SPACEキー押下で弾丸を発射
 				when GLFW_KEY_SPACE
 					shoot
-					
 			end
 		end
 
