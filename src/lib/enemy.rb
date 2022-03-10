@@ -1,4 +1,4 @@
-# 敵キャラクタ
+#子分
 class Enemy
 	attr_accessor :mesh, :expired
 
@@ -9,7 +9,7 @@ class Enemy
 		y ||= rand(10) / 10.0 + 1
 		z ||= rand(10) / 10.0 + 3
 		pos = Mittsu::Vector3.new(x, y, -z)
-		self.mesh = MeshFactory.create_enemy(r: 0.2, color: 0x00ff00)
+		self.mesh = MeshFactory.create_enemy(r: 0.2, color: '#483d8b')
 		self.mesh.position = pos
 		self.expired = false
 	end
