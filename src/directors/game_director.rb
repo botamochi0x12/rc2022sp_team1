@@ -3,12 +3,20 @@ require_relative 'base'
 module Directors
 	# ゲーム本編のディレクター
 	class GameDirector < Base
+
+        attr_accessor :model
+
 		CAMERA_ROTATE_SPEED_X = 0.01
 		CAMERA_ROTATE_SPEED_Y = 0.01
 
 		# 初期化
 		def initialize(screen_width:, screen_height:, renderer:)
 			super
+
+            loader = Mittsu::OBJMTLLoader.new
+
+            self.model = loader.load(File.expand_path('../../../images/COVID19.obj', __FILE__), 'COVID19.mtl')
+
 
 			# ゲーム本編の次に遷移するシーンのディレクターオブジェクトを用意
 			self.next_director = EndingDirector.new(screen_width: screen_width, screen_height: screen_height, renderer: renderer)
@@ -31,6 +39,8 @@ module Directors
 
 		# １フレーム分の進行処理
 		def play
+
+
 			# 地球を少しずつ回転させ、大気圏内を飛行してる雰囲気を醸し出す
 			@earth.rotate_x(0.002)
 
@@ -40,8 +50,10 @@ module Directors
 			# 現在登場済みの敵を一通り動かす
 			@enemies.each(&:play)
 
+
 			# 各弾丸について当たり判定実施
 			@bullets.each{|bullet| hit_any_enemies(bullet) }
+
 
 			# 消滅済みの弾丸及び敵を配列とシーンから除去(わざと複雑っぽく記述しています)
 			rejected_bullets = []
@@ -49,13 +61,14 @@ module Directors
 			rejected_bullets.each{|bullet| self.scene.remove(bullet.mesh) }
 			rejected_enemies = []
 			@enemies.delete_if{|enemy| enemy.expired ? rejected_enemies << enemy : false }
-			rejected_enemies.each{|enemy| self.scene.remove(enemy.mesh) }
+			rejected_enemies.each{|enemy| self.scene.remove(enemy.object) }
 
 			# 一定のフレーム数経過毎に敵キャラを出現させる
 			if @frame_counter % 180 == 0
-				enemy = Enemy.new
+				enemy = Enemy.new(object:self.model)
 				@enemies << enemy
-				self.scene.add(enemy.mesh)
+				self.scene.add(enemy.object)
+                self.scene.print_tree
 			end
 
 			@frame_counter += 1
@@ -64,6 +77,7 @@ module Directors
 			self.camera.rotate_x(-CAMERA_ROTATE_SPEED_X) if self.renderer.window.key_down?(GLFW_KEY_DOWN)
 			self.camera.rotate_y(CAMERA_ROTATE_SPEED_Y) if self.renderer.window.key_down?(GLFW_KEY_LEFT)
 			self.camera.rotate_y(-CAMERA_ROTATE_SPEED_Y) if self.renderer.window.key_down?(GLFW_KEY_RIGHT)
+
 		end
 
 		# キー押下（単発）時のハンドリング
@@ -87,6 +101,8 @@ module Directors
 			# 太陽光をセット
 			@sun = LightFactory.create_sun_light
 			self.scene.add(@sun)
+            #@sun.position.y=0.9
+            scene.add Mittsu::AmbientLight.new(0xffffff)
 
 			# 地球を作成し、カメラ位置（原点）に対して大気圏を飛行してるっぽく見える位置に移動させる
 			@earth = MeshFactory.create_earth
@@ -106,12 +122,12 @@ module Directors
 			bullet = Bullet.new(f)
 			self.scene.add(bullet.mesh)
 			@bullets << bullet
+
 		end
 
 		# 弾丸と敵の当たり判定
 		def hit_any_enemies(bullet)
 			return if bullet.expired
-
 			@enemies.each do |enemy|
 				next if enemy.expired
 				distance = bullet.position.distance_to(enemy.position)

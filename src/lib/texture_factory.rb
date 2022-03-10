@@ -22,6 +22,12 @@ class TextureFactory
 		@@normals[filename]
 	end
 
+    def self.create_enemy_map(filename)
+        @@maps ||= {}
+		@@maps[filename] ||= Mittsu::ImageUtils.load_texture("images/#{filename}")
+		@@maps[filename]
+    end
+
 	# タイトル画面の説明用文字列テクスチャを生成
 	def self.create_title_description
 		Mittsu::ImageUtils.load_texture("images/title_description.png")

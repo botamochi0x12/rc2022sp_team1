@@ -18,7 +18,12 @@ class MeshFactory
 	# 平面パネルの生成
 	def self.create_panel(width: 1, height: 1, color: nil, map: nil)
 		geometry = Mittsu::PlaneGeometry.new(width, height)
-		material = generate_material(:basic, color, map, nil)
+		material = generate_material(
+            :basic,
+            color,
+            map,
+            nil
+        )
 		Mittsu::Mesh.new(geometry, material)
 	end
 
