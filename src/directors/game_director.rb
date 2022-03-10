@@ -59,7 +59,7 @@ module Directors
 
             # 一定のフレーム数経過毎に敵キャラを出現させる
             if @frame_counter % 180 == 0 and @enemies.length < @@NUM_MAX_ENEMIES
-                enemy = Enemy0.new(object:self.model)
+                enemy = BossEnemy.new(object:self.model)
                 @enemies << enemy
                 self.scene.add(enemy.object)
                 self.scene.print_tree

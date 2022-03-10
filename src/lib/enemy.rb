@@ -1,4 +1,4 @@
-#子分
+# 子分エネミー
 class Enemy
 	attr_accessor :mesh, :expired
 
