@@ -9,7 +9,7 @@ module Directors
         @@DEFAULT_ASSET_DIRECTORY = File.join File.dirname(__FILE__), "..", "..", "images"
         @@TONNEL_SHAPE = {width: 5, height: 5, depth: 100}
 
-        attr_accessor :skybox_scene, :skybox_camera, :postinitialized, :predeinitialized, :model, :mesh
+        attr_accessor :skybox_scene, :skybox_camera, :model, :mesh
 
         # 初期化
         def initialize(
