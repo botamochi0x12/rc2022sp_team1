@@ -5,7 +5,7 @@ class Enemy
 	# 初期化
 	def initialize(x: nil, y: nil, z: nil)
 		# 初期位置指定が無ければランダムに配置する
-		x ||= rand(10) / 10.0 - 0.5
+		x ||= rand(-20..20) / 10.0 - 0.5
 		y ||= rand(10) / 10.0 + 1
 		z ||= rand(10) / 10.0 + 3
 		pos = Mittsu::Vector3.new(x, y, -z)
