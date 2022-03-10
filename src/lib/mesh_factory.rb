@@ -7,7 +7,7 @@ class MeshFactory
 		@@material ||= generate_material(
 			:phong, #種類
 			nil, #色
-			TextureFactory.create_texture_map("earth.png"),
+			TextureFactory.create_texture_map("string_a.png"),
 			nil)
 
 		cylinder = Mittsu::Mesh.new(@@geometry, @@material)

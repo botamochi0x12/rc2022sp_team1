@@ -9,7 +9,7 @@ module Directors
         @@DEFAULT_ASSET_DIRECTORY = File.join File.dirname(__FILE__), "..", "..", "images"
         @@TONNEL_SHAPE = {width: 5, height: 5, depth: 100}
 
-        attr_accessor :skybox_scene, :skybox_camera, :postinitialized, :predeinitialized
+        attr_accessor :skybox_scene, :skybox_camera, :postinitialized, :predeinitialized, :model, :mesh
 
         # 初期化
         def initialize(
@@ -17,6 +17,9 @@ module Directors
             screen_height:,
             renderer:,
             floor: true )
+
+            loader = Mittsu::OBJMTLLoader.new
+            self.model = loader.load(File.expand_path('../../../images/COVID19.obj', __FILE__), 'COVID19.mtl')
 
             # current_directorがデフォルトで自分自身を返すように設定
             self.current_director = self
@@ -56,6 +59,7 @@ module Directors
             @bullets = []
 
             # 敵の詰め合わせ用配列
+            @enemies0 = []
             @enemies = []
 
             # 現在のフレーム数をカウントする
@@ -77,6 +81,8 @@ module Directors
 
             self.postinitialize
 
+            # @light2.look_at(@enemies0.first.position) unless @enemies0.empty?
+
             # 壁を少しずつ移動させ、体内を移動してる雰囲気を醸し出す
             @floor&.position&.z += 0.1
             @tunnel&.position&.z += 0.1
@@ -85,6 +91,7 @@ module Directors
             @bullets.each(&:play)
 
             # 現在登場済みの敵を一通り動かす
+            @enemies0.each(&:play)
             @enemies.each(&:play)
 
             # 各弾丸について当たり判定実施
@@ -99,7 +106,10 @@ module Directors
             rejected_enemies.each{|enemy| self.scene.remove(enemy.mesh) }
 
             # 一定のフレーム数経過毎に規定の数以下なら敵キャラを出現させる
-            if @frame_counter % 180 == 0 and @enemies.length < @@NUM_MAX_ENEMIES
+            if @frame_counter % 180 == 0 and (@enemies.length + @enemies0.length < @@NUM_MAX_ENEMIES) then
+                enemy0 = BossEnemy.new(object:self.model)
+                @enemies0 << enemy0
+                self.scene.add(enemy0.object)
                 enemy = Enemy.new
                 @enemies << enemy
                 self.scene.add(enemy.mesh)
@@ -242,8 +252,14 @@ module Directors
             @sunlight = Mittsu::HemisphereLight.new(0xd3c0e8, 0xd7ad7e, 0.7)
             self.scene.add(@sunlight)
 
+            # self.scene.add Mittsu::AmbientLight.new(0xffffff)
+
             @light = Mittsu::SpotLight.new(0xffffff, 1.0)
             @light.position.set(0.0, 30.0, -30.0)
+
+            # @light2 = Mittsu::PointLight.new(0xffffff, 5.0)
+            # @light2.position.z = -3
+            # self.skybox_scene.add(@light2)
 
             @light.cast_shadow = true
             @light.shadow_darkness = 0.5
