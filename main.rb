@@ -30,8 +30,5 @@ renderer.window.run do
 	# １フレーム分、最新のディレクターオブジェクトを進行させる
 	director.play
 
-	# 現在のディレクターオブジェクトが保持するシーンを、同じく現在のディレクターオブジェクトが持つカメラでレンダリング
-	renderer.render(
-		director.scene,
-		director.camera)
+    director.render
 end

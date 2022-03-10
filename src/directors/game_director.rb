@@ -87,6 +87,7 @@ module Directors
 			# 太陽光をセット
 			@sun = LightFactory.create_sun_light
 			self.scene.add(@sun)
+			@sun.position.y = 0.9
 
 			# 地球を作成し、カメラ位置（原点）に対して大気圏を飛行してるっぽく見える位置に移動させる
 			@earth = MeshFactory.create_earth
