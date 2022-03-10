@@ -4,7 +4,7 @@ class TextureFactory
 	# 1文字を表すテクスチャマップの生成
 	def self.create_string(char)
 		@@char_textures ||= {}
-		@@char_textures[char] ||= Mittsu::ImageUtils.load_texture("images/string_#{char}.png")
+		@@char_textures[char] ||= Mittsu::ImageUtils.load_texture("images/japanese_#{char}.png")
 		@@char_textures[char]
 	end
 
