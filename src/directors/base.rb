@@ -1,7 +1,12 @@
 module Directors
 	# ディレクターの共通クラス
 	class Base
-		attr_accessor :scene, :camera, :renderer, :current_director, :next_director, :screen_width, :screen_height
+		attr_accessor(
+            :scene, :camera, :renderer,
+            :current_director, :next_director,
+            :screen_width, :screen_height,
+            :postinitialized, :predeinitialized,
+        )
 
 		# 初期化
 		def initialize(screen_width:, screen_height:, renderer:, fov: 75.0)
@@ -36,6 +41,14 @@ module Directors
 		def transition_to_next_director
 			self.current_director = self.next_director
 		end
+
+        def postinitialize
+            # 何もしない
+        end
+
+        def predeinitialize
+            # 何もしない
+        end
 
         def render
             self.renderer.render(
