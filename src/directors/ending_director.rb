@@ -28,6 +28,8 @@ module Directors
 
         # 1フレーム分の進行処理
         def play
+            self.postinitialize
+
             # テキスト表示用パネルを1フレーム分アニメーションさせる
             @description.play
         end
@@ -42,6 +44,15 @@ module Directors
                 # NOTE:
                 # self.next_directorがセットされていないので
                 # メインループが終わる
+                self.predeinitialize
+            end
+        end
+
+        def render
+            # FIXME: "Congratulations"を表示できるように
+            self.renderer.render(self.scene, self.camera)
+            if self.score&.scene and self.score&.camera
+                self.renderer.render(self.score.scene, self.score.camera)
             end
         end
     end
