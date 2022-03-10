@@ -74,6 +74,8 @@ module Directors
         def play
             self.postinitialize
 
+            #@light2.look_at(@enemies0.first.position) unless @enemies0.empty?
+
             # 壁を少しずつ移動させ、体内を移動してる雰囲気を醸し出す
             @floor&.position&.z += 0.1
             @tunnel&.position&.z += 0.1
@@ -243,8 +245,15 @@ module Directors
             @sunlight = Mittsu::HemisphereLight.new(0xd3c0e8, 0xd7ad7e, 0.7)
             self.scene.add(@sunlight)
 
+            #scene.add Mittsu::AmbientLight.new(0xffffff)
+
             @light = Mittsu::SpotLight.new(0xffffff, 1.0)
             @light.position.set(0.0, 30.0, -30.0)
+
+            #@light2= Mittsu::PointLight.new(0xffffff,5.0)
+            #self.skybox_scene.add(@light2)
+            #@light2.position.z=-3
+
 
             @light.cast_shadow = true
             @light.shadow_darkness = 0.5
