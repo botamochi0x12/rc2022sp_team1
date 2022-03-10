@@ -3,11 +3,11 @@ require_relative 'base'
 module Directors
     # トンネルのシーンのディレクター
     class TunnelStageDirector < Base
-        CAMERA_ROTATE_SPEED_X = 0.01
-        CAMERA_ROTATE_SPEED_Y = 0.01
-        NUM_MAX_ENEMIES = 20
-        DEFAULT_ASSET_DIRECTORY = File.join File.dirname(__FILE__), "..", "..", "images"
-        TONNEL_SHAPE = {width: 5, height: 5, depth: 100}
+        @@CAMERA_ROTATE_SPEED_X = 0.01
+        @@CAMERA_ROTATE_SPEED_Y = 0.01
+        @@NUM_MAX_ENEMIES = 20
+        @@DEFAULT_ASSET_DIRECTORY = File.join File.dirname(__FILE__), "..", "..", "images"
+        @@TONNEL_SHAPE = {width: 5, height: 5, depth: 100}
 
         attr_accessor :skybox_scene, :skybox_camera, :postinitialized, :predeinitialized
 
@@ -64,10 +64,17 @@ module Directors
             @camera_rotate_x = 0.0
             @camera_rotate_y = 0.0
 
+            @score = Score.new screen_width, screen_height
+            @clock = Clock.new screen_width, screen_height
         end
 
         # １フレーム分の進行処理
         def play
+            if @clock&.expired
+                self.transition_to_next_director
+                return
+            end
+
             self.postinitialize
 
             # 壁を少しずつ移動させ、体内を移動してる雰囲気を醸し出す
@@ -92,7 +99,7 @@ module Directors
             rejected_enemies.each{|enemy| self.scene.remove(enemy.mesh) }
 
             # 一定のフレーム数経過毎に規定の数以下なら敵キャラを出現させる
-            if @frame_counter % 180 == 0 and @enemies.length < NUM_MAX_ENEMIES
+            if @frame_counter % 180 == 0 and @enemies.length < @@NUM_MAX_ENEMIES
                 enemy = Enemy.new
                 @enemies << enemy
                 self.scene.add(enemy.mesh)
@@ -100,10 +107,13 @@ module Directors
 
             @frame_counter += 1
 
-            self.camera.rotate_x(CAMERA_ROTATE_SPEED_X) if self.renderer.window.key_down?(GLFW_KEY_UP)
-            self.camera.rotate_x(-CAMERA_ROTATE_SPEED_X) if self.renderer.window.key_down?(GLFW_KEY_DOWN)
-            self.camera.rotate_y(CAMERA_ROTATE_SPEED_Y) if self.renderer.window.key_down?(GLFW_KEY_LEFT)
-            self.camera.rotate_y(-CAMERA_ROTATE_SPEED_Y) if self.renderer.window.key_down?(GLFW_KEY_RIGHT)
+            self.camera.rotate_x(@@CAMERA_ROTATE_SPEED_X) if self.renderer.window.key_down?(GLFW_KEY_UP)
+            self.camera.rotate_x(-@@CAMERA_ROTATE_SPEED_X) if self.renderer.window.key_down?(GLFW_KEY_DOWN)
+            self.camera.rotate_y(@@CAMERA_ROTATE_SPEED_Y) if self.renderer.window.key_down?(GLFW_KEY_LEFT)
+            self.camera.rotate_y(-@@CAMERA_ROTATE_SPEED_Y) if self.renderer.window.key_down?(GLFW_KEY_RIGHT)
+
+            @score&.update_points
+            @clock&.update_by_frame
         end
 
         def postinitialize
@@ -161,6 +171,9 @@ module Directors
                 self.scene,
                 self.camera
             )
+
+            self.renderer.render(@score.scene, @score.camera) if @score
+            self.renderer.render(@clock.scene, @clock.camera) if @clock
         end
 
         private
@@ -169,7 +182,7 @@ module Directors
         def create_tunnel floor: nil
             cube_map_texture = Mittsu::ImageUtils.load_texture_cube(
                 [ 'rt', 'lf', 'up', 'dn', 'bk', 'ft' ].map { |path|
-                    File.join DEFAULT_ASSET_DIRECTORY, "desert.png"
+                    File.join @@DEFAULT_ASSET_DIRECTORY, "desert.png"
                 }
             )
 
@@ -186,9 +199,9 @@ module Directors
 
             @skybox = Mittsu::Mesh.new(
                 Mittsu::BoxGeometry.new(
-                    TONNEL_SHAPE[:width],
-                    TONNEL_SHAPE[:height],
-                    TONNEL_SHAPE[:depth],
+                    @@TONNEL_SHAPE[:width],
+                    @@TONNEL_SHAPE[:height],
+                    @@TONNEL_SHAPE[:depth],
                 ),
                 skybox_material
             )
@@ -207,10 +220,10 @@ module Directors
                     Mittsu::BoxGeometry.new(1.0, 1.0, 1.0),
                     Mittsu::MeshPhongMaterial.new(
                         map: Mittsu::ImageUtils.load_texture(
-                            File.join DEFAULT_ASSET_DIRECTORY, "desert.png"
+                            File.join @@DEFAULT_ASSET_DIRECTORY, "desert.png"
                         ).tap { |t| set_repeat(t) },
                         normal_map: Mittsu::ImageUtils.load_texture(
-                            File.join DEFAULT_ASSET_DIRECTORY, "desert-normal.png"
+                            File.join @@DEFAULT_ASSET_DIRECTORY, "desert-normal.png"
                         ).tap { |t| set_repeat(t) }
                     )
                 )
@@ -277,6 +290,7 @@ module Directors
                 distance = bullet.position.distance_to(enemy.position)
                 if distance < 0.2
                     puts "Hit!"
+                    @score&.points += 1
                     bullet.expired = true
                     enemy.expired = true
                 end
