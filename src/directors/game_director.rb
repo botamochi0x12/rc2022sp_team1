@@ -117,6 +117,8 @@ module Directors
 				distance = bullet.position.distance_to(enemy.position)
 				if distance < 0.2
 					puts "Hit!"
+                    self.next_director.score += 1
+                    puts self.next_director.score
 					bullet.expired = true
 					enemy.expired = true
 				end

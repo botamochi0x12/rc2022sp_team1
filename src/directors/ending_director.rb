@@ -1,11 +1,15 @@
 require_relative 'base'
 
+
 module Directors
 	# エンディング画面用ディレクター
 	class EndingDirector < Base
+        attr_accessor :score
 		# 初期化
 		def initialize(screen_width:, screen_height:, renderer:)
 			super
+            self.score = 0
+
 
 			# テキスト表示用パネルを生成し、カメラから程よい距離に配置する
 			@description = AnimatedPanel.new(width: 1, height: 0.25, start_frame: 15, map: TextureFactory.create_ending_description)
@@ -24,7 +28,8 @@ module Directors
 			case glfw_key
 				# ESCキー押下で終了する
 				when GLFW_KEY_ESCAPE
-					puts "クリア!!"
+					puts "クリア!!!"
+                    puts self.score
 					transition_to_next_director # self.next_directorがセットされていないのでメインループが終わる
 			end
 		end
