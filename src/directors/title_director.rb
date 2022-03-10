@@ -55,10 +55,10 @@ module Directors
             self.scene.add(@earth)
 
             # タイトル文字パネルの初期表示位置（X座標）を定義
-            start_x = -0.35
+            start_x = -0.4
 
             # RubyCampの8文字を、1文字1アニメーションパネルとして作成し、表示開始タイミングを微妙にずらす
-            %w(R u b y C a m p).each_with_index do |char, idx|
+            %w(u i r s b s t - z).each_with_index do |char, idx|
                 create_title_logo(char, start_x + (idx * 0.1), idx * 2)
             end
 
