@@ -9,7 +9,7 @@ module Directors
         @@DEFAULT_ASSET_DIRECTORY = File.join File.dirname(__FILE__), "..", "..", "images"
         @@TONNEL_SHAPE = {width: 5, height: 5, depth: 100}
 
-        attr_accessor :skybox_scene, :skybox_camera, :postinitialized, :predeinitialized, :model, :mesh
+        attr_accessor :skybox_scene, :skybox_camera, :model, :mesh
 
         # 初期化
         def initialize(
@@ -45,11 +45,15 @@ module Directors
                 self.skybox_camera.update_projection_matrix
             end
 
+            @score = Score.new screen_width, screen_height
+            @clock = Clock.new screen_width, screen_height
+
             # トンネルのシーンの次に遷移するシーンのディレクターオブジェクトを用意
             self.next_director = EndingDirector.new(
                 screen_width: screen_width,
                 screen_height: screen_height,
                 renderer: renderer,
+                score: @score,
             )
 
             # トンネルのシーンの登場オブジェクト群を生成
@@ -67,9 +71,6 @@ module Directors
 
             @camera_rotate_x = 0.0
             @camera_rotate_y = 0.0
-
-            @score = Score.new screen_width, screen_height
-            @clock = Clock.new screen_width, screen_height
         end
 
         # １フレーム分の進行処理
