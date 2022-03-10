@@ -45,11 +45,15 @@ module Directors
                 self.skybox_camera.update_projection_matrix
             end
 
+            @score = Score.new screen_width, screen_height
+            @clock = Clock.new screen_width, screen_height
+
             # トンネルのシーンの次に遷移するシーンのディレクターオブジェクトを用意
             self.next_director = EndingDirector.new(
                 screen_width: screen_width,
                 screen_height: screen_height,
                 renderer: renderer,
+                score: @score,
             )
 
             # トンネルのシーンの登場オブジェクト群を生成
@@ -67,9 +71,6 @@ module Directors
 
             @camera_rotate_x = 0.0
             @camera_rotate_y = 0.0
-
-            @score = Score.new screen_width, screen_height
-            @clock = Clock.new screen_width, screen_height
         end
 
         # １フレーム分の進行処理
