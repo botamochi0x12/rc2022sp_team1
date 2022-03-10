@@ -65,10 +65,16 @@ module Directors
             @camera_rotate_y = 0.0
 
             @score = Score.new screen_width, screen_height
+            @clock = Clock.new screen_width, screen_height
         end
 
         # １フレーム分の進行処理
         def play
+            if @clock&.expired
+                self.transition_to_next_director
+                return
+            end
+
             self.postinitialize
 
             # 壁を少しずつ移動させ、体内を移動してる雰囲気を醸し出す
@@ -107,6 +113,7 @@ module Directors
             self.camera.rotate_y(-@@CAMERA_ROTATE_SPEED_Y) if self.renderer.window.key_down?(GLFW_KEY_RIGHT)
 
             @score&.update_points
+            @clock&.update_by_frame
         end
 
         def postinitialize
@@ -166,6 +173,7 @@ module Directors
             )
 
             self.renderer.render(@score.scene, @score.camera) if @score
+            self.renderer.render(@clock.scene, @clock.camera) if @clock
         end
 
         private
