@@ -2,7 +2,7 @@
 # ゲーム内に登場するメッシュを生産する役割を一手に引き受ける
 class MeshFactory
 	# 弾丸の生成
-	def self.create_bullet(r: 0.2, div_w: 16, div_h: 16, color: nil, map: nil, normal_map: nil)
+	def self.create_bullet(r: 0.07, div_w: 16, div_h: 16, color: nil, map: nil, normal_map: nil)
 		@@geometry ||= Mittsu::CylinderGeometry.new(0.07, 0.07, 0.3, 8, 1, false, 0.0, Math::PI * 2.0 )
 		@@material ||= generate_material(
 			:phong, #種類

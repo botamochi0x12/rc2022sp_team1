@@ -252,6 +252,11 @@ module Directors
             # 太陽光を設置
             @sunlight = Mittsu::HemisphereLight.new(0xd3c0e8, 0xd7ad7e, 0.7)
             self.scene.add(@sunlight)
+            @sunlight.position.y = 0.9
+            @sun = LightFactory.create_sun_light
+			self.scene.add(@sun)
+		    @sun.position.y = 0.9
+
 
             # self.scene.add Mittsu::AmbientLight.new(0xffffff)
 
