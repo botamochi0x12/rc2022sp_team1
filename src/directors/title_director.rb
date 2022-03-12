@@ -72,7 +72,7 @@ module Directors
             # 説明文字列用のパネル作成
             # タイトル画面表示開始から180フレーム経過で表示するように調整
             # 位置は適当に決め打ち
-      @description = Panel.new(width: 1, height: 0.15 ,start_frame: 1200, map: TextureFactory.create_title_description)
+      @description = Panel.new(width: 1, height: 0.15 ,start_frame: 900, map: TextureFactory.create_title_description)
       @description.mesh.position.y = -0.25
             @description.mesh.position.z = -0.5
             self.scene.add(@description.mesh)
