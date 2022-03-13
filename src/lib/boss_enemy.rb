@@ -1,16 +1,16 @@
 # 親分エネミー
 class BossEnemy
-    attr_accessor :object, :expired, :rotation, :mesh
+    attr_accessor :object, :expired, :rotation
 
-    def initialize(x: nil, y: nil, z: nil, scene: nil, object: nil)
-        x ||= rand(10) / 10.0 - 0.5
-        #y ||= rand(10) / 10.0 + 1
-        #z ||= rand(10) / 10.0 + 3
+    # mesh をプロパティとして定義
+    def mesh
+        self.object
+    end
+
+    def initialize(x: 0.0, y: 40.0, z: -100.0, scene: nil, object: nil)
+        pos = Mittsu::Vector3.new(x, y, z)
 
         self.object = object
-
-        pos = Mittsu::Vector3.new(x, 40, -100)
-
         self.object.position = pos
         self.expired = false
 
@@ -21,23 +21,31 @@ class BossEnemy
     end
 
     def play
+        self.object.rotation.x += (Math::PI / 180.0) * (45.0 / 60.0)
+        self.object.rotation.y += (Math::PI / 180.0) * (45.0 / 60.0)
+        self.move_randomly
+    end
+
+    def move_randomly
         dx = rand(3)
         dy = rand(3)
-        self.object.rotation.x += 0.1
-        self.object.rotation.y += 0.1
 
         case dx
+        when 0
+            # 何もしない
         when 1
-            self.object.position.x += 0
+            self.object.position.x += 1
         when 2
-            self.object.position.x -= 0
+            self.object.position.x -= 1
         end
 
         case dy
+        when 0
+            # 何もしない
         when 1
-            self.object.position.y += 0
+            self.object.position.y += 1
         when 2
-            self.object.position.y -= 0
+            self.object.position.y -= 1
         end
     end
 end
