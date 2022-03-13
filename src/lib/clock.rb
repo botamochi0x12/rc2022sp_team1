@@ -8,7 +8,7 @@ class Clock
     def initialize(screen_width, screen_height, time_left: @@DEFAULT_TIMELIMIT)
         @camera = Mittsu::OrthographicCamera.new(-screen_width / 2.0, screen_width / 2.0, screen_height / 2.0, -screen_height / 2.0, 0.0, 1.0)
         @scene = Mittsu::Scene.new
-        @time_left = @@DEFAULT_TIMELIMIT
+        @time_left = time_left
         @time_frame_spent = 0
         self.expired = false
         @digits = []
