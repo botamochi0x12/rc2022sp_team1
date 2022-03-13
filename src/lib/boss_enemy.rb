@@ -2,14 +2,10 @@
 class BossEnemy
     attr_accessor :object, :expired, :rotation, :mesh
 
-    def initialize(x: nil, y: nil, z: nil, scene: nil, object: nil)
-        x ||= rand(10) / 10.0 - 0.5
-        #y ||= rand(10) / 10.0 + 1
-        #z ||= rand(10) / 10.0 + 3
-
+    def initialize(x: 0.0, y: 40.0, z: -100.0, scene: nil, object: nil)
         self.object = object
 
-        pos = Mittsu::Vector3.new(x, 40, -100)
+        pos = Mittsu::Vector3.new(x, y, z)
 
         self.object.position = pos
         self.expired = false
