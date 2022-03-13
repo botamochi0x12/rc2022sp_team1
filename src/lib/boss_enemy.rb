@@ -8,10 +8,9 @@ class BossEnemy
     end
 
     def initialize(x: 0.0, y: 40.0, z: -100.0, scene: nil, object: nil)
-        self.object = object
-
         pos = Mittsu::Vector3.new(x, y, z)
 
+        self.object = object
         self.object.position = pos
         self.expired = false
 
