@@ -1,6 +1,11 @@
 # 親分エネミー
 class BossEnemy
-    attr_accessor :object, :expired, :rotation, :mesh
+    attr_accessor :object, :expired, :rotation
+
+    # mesh をプロパティとして定義
+    def mesh
+        self.object
+    end
 
     def initialize(x: 0.0, y: 40.0, z: -100.0, scene: nil, object: nil)
         self.object = object
