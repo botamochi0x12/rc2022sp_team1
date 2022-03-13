@@ -21,23 +21,31 @@ class BossEnemy
     end
 
     def play
+        self.object.rotation.x += (Math::PI / 180.0) * (45.0 / 60.0)
+        self.object.rotation.y += (Math::PI / 180.0) * (45.0 / 60.0)
+        self.move_randomly
+    end
+
+    def move_randomly
         dx = rand(3)
         dy = rand(3)
-        self.object.rotation.x += 0.1
-        self.object.rotation.y += 0.1
 
         case dx
+        when 0
+            # 何もしない
         when 1
-            self.object.position.x += 0
+            self.object.position.x += 1
         when 2
-            self.object.position.x -= 0
+            self.object.position.x -= 1
         end
 
         case dy
+        when 0
+            # 何もしない
         when 1
-            self.object.position.y += 0
+            self.object.position.y += 1
         when 2
-            self.object.position.y -= 0
+            self.object.position.y -= 1
         end
     end
 end
