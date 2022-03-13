@@ -51,7 +51,6 @@ class Clock
             map = @maps[point.to_i]
             sprite = @digits[index]
             sprite.material.set_values(map: map)
-            material = Mittsu::SpriteMaterial.new(map: map)
         end
     end
 end
