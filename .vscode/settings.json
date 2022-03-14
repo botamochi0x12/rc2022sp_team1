@@ -1,0 +1,19 @@
+{
+  "[ruby]": {
+    "editor.autoIndent": "full",
+    "editor.comments.insertSpace": true,
+    "editor.insertSpaces": true,
+    "editor.rulers": [80],
+    "editor.tabSize": 2,
+    "files.encoding": "utf8",
+    "files.eol": "\r\n",
+    "files.insertFinalNewline": true,
+    "files.trimTrailingWhitespace": true,
+    "editor.formatOnSave": true,
+  },
+  "ruby.format": "rubocop",
+  "ruby.lint": {
+    "rubocop": true,
+  },
+  "editor.defaultFormatter": "castwide.ruby-debug",
+}
