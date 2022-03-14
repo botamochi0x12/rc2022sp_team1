@@ -223,7 +223,7 @@ module Directors
         tex.repeat.set(1000, 1000)
       end
 
-      if floor.instance_of?(Mittsu: Mesh)
+      if floor.instance_of?(Mittsu::Mesh)
         @floor = floor
       elsif floor
         @floor = Mittsu::Mesh.new(
