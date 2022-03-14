@@ -257,14 +257,8 @@ module Directors
       scene.add(@sun)
       @sun.position.y = 0.9
 
-      # self.scene.add Mittsu::AmbientLight.new(0xffffff)
-
       @light = Mittsu::SpotLight.new(0xffffff, 1.0)
       @light.position.set(0.0, 30.0, -30.0)
-
-      # @light2 = Mittsu::PointLight.new(0xffffff, 5.0)
-      # @light2.position.z = -3
-      # self.skybox_scene.add(@light2)
 
       @light.cast_shadow = true
       @light.shadow_darkness = 0.5
