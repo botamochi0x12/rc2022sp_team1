@@ -31,8 +31,8 @@ module Directors
 
     # １フレーム分の進行処理
     def play
-      # 地球を少しずつ回転させ、大気圏内を飛行してる雰囲気を醸し出す
-      @earth.rotate_x(0.002)
+      # ボスを少しずつ回転させ、周回してる雰囲気を醸し出す
+      @boss_enemy.rotate_x(0.002)
 
       # 現在発射済みの弾丸を一通り動かす
       @bullets.each(&:play)
@@ -89,11 +89,11 @@ module Directors
       scene.add(@sun)
       @sun.position.y = 0.9
 
-      # 地球を作成し、カメラ位置（原点）に対して大気圏を飛行してるっぽく見える位置に移動させる
-      @earth = MeshFactory.create_earth
-      @earth.position.y = -0.9
-      @earth.position.z = -0.8
-      scene.add(@earth)
+      # ボスを作成し、カメラ位置（原点）に対して周回してるっぽく見える位置に移動させる
+      @boss_enemy = MeshFactory.create_boss_enemy(r: 1.0)
+      @boss_enemy.position.y = -0.9
+      @boss_enemy.position.z = -0.8
+      scene.add(@boss_enemy)
     end
 
     # 弾丸発射
