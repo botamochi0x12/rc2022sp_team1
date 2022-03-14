@@ -16,6 +16,9 @@ Layout/CommentIndentation:
   Description: 'Indentation of comments.'
   Enabled: false
 
+Layout/EndOfLine:
+  EnforcedStyle: crlf
+
 Layout/IndentationWidth:
   Description: 'Use 2 spaces for indentation.'
   StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#spaces-indentation'
