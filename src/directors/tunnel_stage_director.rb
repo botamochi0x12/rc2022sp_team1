@@ -83,8 +83,6 @@ module Directors
 
       postinitialize
 
-      # @light2.look_at(@enemies0.first.position) unless @enemies0.empty?
-
       # 壁を少しずつ移動させ、体内を移動してる雰囲気を醸し出す
       @floor&.position&.z += 0.1
       @tunnel&.position&.z += 0.1
