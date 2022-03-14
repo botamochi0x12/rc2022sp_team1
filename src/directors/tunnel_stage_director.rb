@@ -9,7 +9,7 @@ module Directors
     @@DEFAULT_ASSET_DIRECTORY = File.join File.dirname(__FILE__), '..', '..', 'images'
     @@TONNEL_SHAPE = { width: 5, height: 5, depth: 100 }
 
-    attr_accessor :skybox_scene, :skybox_camera, :model, :mesh
+    attr_accessor :skybox_scene, :skybox_camera
 
     # 初期化
     def initialize(
@@ -18,9 +18,6 @@ module Directors
       renderer:,
       floor: true
     )
-
-    loader = Mittsu::OBJMTLLoader.new
-    self.model = loader.load(File.expand_path('../../images/COVID19.obj', __dir__), 'COVID19.mtl')
 
     # current_directorがデフォルトで自分自身を返すように設定
     self.current_director = self
@@ -60,11 +57,14 @@ module Directors
     # トンネルのシーンの登場オブジェクト群を生成
     create_objects
 
+    # ボスを生成
+    @boss_enemy = BossEnemy.new(x: 0.0, y: 40.0, z: -100.0)
+    scene.add(@boss_enemy.mesh)
+
     # 弾丸の詰め合わせ用配列
     @bullets = []
 
     # 敵の詰め合わせ用配列
-    @enemies0 = []
     @enemies = []
 
     # 現在のフレーム数をカウントする
@@ -83,8 +83,6 @@ module Directors
 
       postinitialize
 
-      # @light2.look_at(@enemies0.first.position) unless @enemies0.empty?
-
       # 壁を少しずつ移動させ、体内を移動してる雰囲気を醸し出す
       @floor&.position&.z += 0.1
       @tunnel&.position&.z += 0.1
@@ -93,7 +91,7 @@ module Directors
       @bullets.each(&:play)
 
       # 現在登場済みの敵を一通り動かす
-      @enemies0.each(&:play)
+      @boss_enemy.play
       @enemies.each(&:play)
 
       # 各弾丸について当たり判定実施
@@ -108,10 +106,7 @@ module Directors
       rejected_enemies.each { |enemy| scene.remove(enemy.mesh) }
 
       # 一定のフレーム数経過毎に規定の数以下なら敵キャラを出現させる
-      if (@frame_counter % 180).zero? && (@enemies.length + @enemies0.length < @@NUM_MAX_ENEMIES)
-        enemy0 = BossEnemy.new(object: model)
-        @enemies0 << enemy0
-        scene.add(enemy0.object)
+      if (@frame_counter % 180).zero? && (@enemies.length < @@NUM_MAX_ENEMIES)
         enemy = Enemy.new
         @enemies << enemy
         scene.add(enemy.mesh)
@@ -201,13 +196,15 @@ module Directors
       shader = Mittsu::ShaderLib[:cube]
       shader.uniforms['tCube'].value = cube_map_texture
 
-      skybox_material = Mittsu::ShaderMaterial.new({
-                                                     fragment_shader: shader.fragment_shader,
-                                                     vertex_shader: shader.vertex_shader,
-                                                     uniforms: shader.uniforms,
-                                                     depth_write: false,
-                                                     side: Mittsu::BackSide
-                                                   })
+      skybox_material = Mittsu::ShaderMaterial.new(
+        {
+          fragment_shader: shader.fragment_shader,
+          vertex_shader: shader.vertex_shader,
+          uniforms: shader.uniforms,
+          depth_write: false,
+          side: Mittsu::BackSide
+        }
+      )
 
       @skybox = Mittsu::Mesh.new(
         Mittsu::BoxGeometry.new(
@@ -225,7 +222,7 @@ module Directors
         tex.repeat.set(1000, 1000)
       end
 
-      if floor.instance_of?(Mittsu: Mesh)
+      if floor.instance_of?(Mittsu::Mesh)
         @floor = floor
       elsif floor
         @floor = Mittsu::Mesh.new(
@@ -257,14 +254,8 @@ module Directors
       scene.add(@sun)
       @sun.position.y = 0.9
 
-      # self.scene.add Mittsu::AmbientLight.new(0xffffff)
-
       @light = Mittsu::SpotLight.new(0xffffff, 1.0)
       @light.position.set(0.0, 30.0, -30.0)
-
-      # @light2 = Mittsu::PointLight.new(0xffffff, 5.0)
-      # @light2.position.z = -3
-      # self.skybox_scene.add(@light2)
 
       @light.cast_shadow = true
       @light.shadow_darkness = 0.5

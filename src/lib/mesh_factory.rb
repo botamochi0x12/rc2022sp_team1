@@ -36,6 +36,11 @@ class MeshFactory
     cylinder.add(harf1, harf2)
   end
 
+  # 敵ボスキャラクタの生成
+  def self.create_boss_enemy(r: 50.0)
+    create_enemy(r:)
+  end
+
   # 敵キャラクタの生成
   def self.create_enemy(r: 0.1, div_w: 16, div_h: 16, color: nil, map: nil, normal_map: nil)
     geometry = Mittsu::SphereGeometry.new(r, div_w, div_h)
