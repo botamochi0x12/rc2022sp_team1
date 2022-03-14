@@ -199,13 +199,15 @@ module Directors
       shader = Mittsu::ShaderLib[:cube]
       shader.uniforms['tCube'].value = cube_map_texture
 
-      skybox_material = Mittsu::ShaderMaterial.new({
-                                                     fragment_shader: shader.fragment_shader,
-                                                     vertex_shader: shader.vertex_shader,
-                                                     uniforms: shader.uniforms,
-                                                     depth_write: false,
-                                                     side: Mittsu::BackSide
-                                                   })
+      skybox_material = Mittsu::ShaderMaterial.new(
+        {
+          fragment_shader: shader.fragment_shader,
+          vertex_shader: shader.vertex_shader,
+          uniforms: shader.uniforms,
+          depth_write: false,
+          side: Mittsu::BackSide
+        }
+      )
 
       @skybox = Mittsu::Mesh.new(
         Mittsu::BoxGeometry.new(
