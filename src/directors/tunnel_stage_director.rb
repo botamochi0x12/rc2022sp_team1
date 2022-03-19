@@ -44,7 +44,7 @@ module Directors
     end
 
     @score = Score.new screen_width, screen_height
-    @clock = Clock.new screen_width, screen_height
+    @clock = CountDownClock.new screen_width, screen_height
 
     # トンネルのシーンの次に遷移するシーンのディレクターオブジェクトを用意
     self.next_director = EndingDirector.new(
