@@ -63,11 +63,12 @@ module Directors
       # タイトル文字パネルの初期表示位置（X座標）を定義
       start_x = -0.4
 
-      # RubyCampの8文字を、1文字1アニメーションパネルとして作成し、
+      # 1文字1アニメーションパネルとして作成し、
       # 表示開始タイミングを微妙にずらす
-      %w[u i r s b s t - z].each_with_index do |char, idx|
-        create_title_logo(char, start_x + (idx * 0.1), idx * 2)
+      @panels = %w[u i r s b s t - z].map.with_index do |char, idx|
+        create_title_panel(char, start_x + (idx * 0.1), idx * 2)
       end
+      @panels.each { |panel| scene.add(panel.mesh) }
 
       # 説明文字列用のパネル作成
       # タイトル画面表示開始から180フレーム経過で表示するように調整
@@ -93,18 +94,16 @@ module Directors
     # タイトルロゴ用アニメーションパネル作成
     # タイトル画面の表示開始から30+delay_framesのフレームが経過してから、
     # 120フレーム掛けてアニメーションするよう設定
-    def create_title_logo(char, x_pos, delay_frames)
-      panel = AnimatedPanel.new(
+    def create_title_panel(char, x_pos, delay_frames)
+      AnimatedPanel.new(
         start_frame: 30 + delay_frames,
         duration: 120,
-        map: TextureFactory.create_string(char)
-      )
-      panel.mesh.position.x = x_pos
-      panel.mesh.position.y = 0.33
-      panel.mesh.position.z = -0.5
-      scene.add(panel.mesh)
-      @panels ||= []
-      @panels << panel
+        map: TextureFactory.create_letter(char)
+      ).tap do |panel|
+        panel.mesh.position.x = x_pos
+        panel.mesh.position.y = 0.33
+        panel.mesh.position.z = -0.5
+      end
     end
   end
 end

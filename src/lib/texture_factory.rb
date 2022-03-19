@@ -1,11 +1,16 @@
 # テクスチャ・ノーマルマップ用ファクトリー
 # 同じテクスチャを毎回ロードし直さないよう、キャッシングを有効にしている点に注意
 class TextureFactory
-  # 1文字を表すテクスチャマップの生成
+  # [deprecated] 1文字を表すテクスチャマップの生成
   def self.create_string(char)
-    @@char_textures ||= {}
-    @@char_textures[char] ||= Mittsu::ImageUtils.load_texture("images/japanese_#{char}.png")
-    @@char_textures[char]
+    create_letter(char)
+  end
+
+  # 1文字を表すテクスチャマップの生成
+  def self.create_letter(name)
+    @@letter_textures ||= {}
+    @@letter_textures[name] ||= Mittsu::ImageUtils.load_texture("images/japanese_#{name}.png")
+    @@letter_textures[name]
   end
 
   # 任意のテクスチャマップの生成
