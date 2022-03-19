@@ -3,8 +3,8 @@ require_relative 'base'
 module Directors
   # ゲーム本編のディレクター
   class GameDirector < Base
-    @@CAMERA_ROTATE_SPEED_X = 0.01
-    @@CAMERA_ROTATE_SPEED_Y = 0.01
+    CAMERA_ROTATE_SPEED_X = 0.01
+    CAMERA_ROTATE_SPEED_Y = 0.01
 
     # 初期化
     def initialize(screen_width:, screen_height:, renderer:)
@@ -60,10 +60,10 @@ module Directors
 
       @frame_counter += 1
 
-      camera.rotate_x(@@CAMERA_ROTATE_SPEED_X) if renderer.window.key_down?(GLFW_KEY_UP)
-      camera.rotate_x(-@@CAMERA_ROTATE_SPEED_X) if renderer.window.key_down?(GLFW_KEY_DOWN)
-      camera.rotate_y(@@CAMERA_ROTATE_SPEED_Y) if renderer.window.key_down?(GLFW_KEY_LEFT)
-      camera.rotate_y(-@@CAMERA_ROTATE_SPEED_Y) if renderer.window.key_down?(GLFW_KEY_RIGHT)
+      camera.rotate_x(CAMERA_ROTATE_SPEED_X) if renderer.window.key_down?(GLFW_KEY_UP)
+      camera.rotate_x(-CAMERA_ROTATE_SPEED_X) if renderer.window.key_down?(GLFW_KEY_DOWN)
+      camera.rotate_y(CAMERA_ROTATE_SPEED_Y) if renderer.window.key_down?(GLFW_KEY_LEFT)
+      camera.rotate_y(-CAMERA_ROTATE_SPEED_Y) if renderer.window.key_down?(GLFW_KEY_RIGHT)
     end
 
     # キー押下（単発）時のハンドリング
