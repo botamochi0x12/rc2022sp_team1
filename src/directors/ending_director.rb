@@ -8,9 +8,9 @@ module Directors
       super(screen_width:, screen_height:, renderer:)
 
       @score = if score.instance_of?(Score)
-        score
+                 score
                else
-        Score.new(screen_width, screen_height)
+                 Score.new(screen_width, screen_height)
                end
 
       # テキスト表示用パネルを生成し、カメラから程よい距離に配置する
@@ -60,21 +60,21 @@ module Directors
     end
 
     def postinitialize
-        return if postinitialized
+      return if postinitialized
 
-        # Skymapを使用するために自動的な切り替えをしなくする
-        renderer.auto_clear = false
+      # Skymapを使用するために自動的な切り替えをしなくする
+      renderer.auto_clear = false
 
-        self.postinitialized = true
+      self.postinitialized = true
     end
 
     def predeinitialize
-        return if predeinitialized
+      return if predeinitialized
 
-        # 自動的な切り替えをするようにする
-        renderer.auto_clear = true
+      # 自動的な切り替えをするようにする
+      renderer.auto_clear = true
 
-        self.predeinitialized = true
+      self.predeinitialized = true
     end
 
     def render
