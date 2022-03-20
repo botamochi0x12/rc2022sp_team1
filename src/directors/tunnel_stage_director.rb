@@ -3,11 +3,11 @@ require_relative 'base'
 module Directors
   # トンネルのシーンのディレクター
   class TunnelStageDirector < Base
-    @@CAMERA_ROTATE_SPEED_X = 0.01
-    @@CAMERA_ROTATE_SPEED_Y = 0.01
-    @@NUM_MAX_ENEMIES = 20
-    @@DEFAULT_ASSET_DIRECTORY = File.join File.dirname(__FILE__), '..', '..', 'images'
-    @@TONNEL_SHAPE = { width: 5, height: 5, depth: 100 }
+    CAMERA_ROTATE_SPEED_X = 0.01
+    CAMERA_ROTATE_SPEED_Y = 0.01
+    NUM_MAX_ENEMIES = 20
+    DEFAULT_ASSET_DIRECTORY = File.join File.dirname(__FILE__), '..', '..', 'images'
+    TONNEL_SHAPE = { width: 5, height: 5, depth: 100 }.freeze
 
     attr_accessor :skybox_scene, :skybox_camera
 
@@ -19,62 +19,62 @@ module Directors
       floor: true
     )
 
-    # current_directorがデフォルトで自分自身を返すように設定
-    self.current_director = self
-    self.renderer = renderer
+      # current_directorがデフォルトで自分自身を返すように設定
+      self.current_director = self
+      self.renderer = renderer
 
-    # 画面解像度情報・アスペクト比を設定
-    self.screen_width = screen_width
-    self.screen_height = screen_height
-    aspect = screen_width / screen_height.to_f
+      # 画面解像度情報・アスペクト比を設定
+      self.screen_width = screen_width
+      self.screen_height = screen_height
+      aspect = screen_width / screen_height.to_f
 
-    # 当該ディレクターが扱うシーンとカメラを作成
-    self.scene = Mittsu::Scene.new
-    self.skybox_scene = Mittsu::Scene.new
-    self.camera = Mittsu::PerspectiveCamera.new(75.0, aspect, 0.1, 1000.0)
-    self.skybox_camera = Mittsu::PerspectiveCamera.new(75.0, aspect, 1.0, 100.0)
+      # 当該ディレクターが扱うシーンとカメラを作成
+      self.scene = Mittsu::Scene.new
+      self.skybox_scene = Mittsu::Scene.new
+      self.camera = Mittsu::PerspectiveCamera.new(75.0, aspect, 0.1, 1000.0)
+      self.skybox_camera = Mittsu::PerspectiveCamera.new(75.0, aspect, 1.0, 100.0)
 
-    create_tunnel(floor:)
+      create_tunnel(floor:)
 
-    self.renderer.window.on_resize do |width, height|
-      self.renderer.set_viewport(0, 0, width, height)
-      camera.aspect = skybox_camera.aspect = width.to_f / height
-      camera.update_projection_matrix
-      skybox_camera.update_projection_matrix
+      self.renderer.window.on_resize do |width, height|
+        self.renderer.set_viewport(0, 0, width, height)
+        camera.aspect = skybox_camera.aspect = width.to_f / height
+        camera.update_projection_matrix
+        skybox_camera.update_projection_matrix
+      end
+
+      @score = Score.new screen_width, screen_height
+      @clock = CountDownClock.new screen_width, screen_height
+
+      # トンネルのシーンの次に遷移するシーンのディレクターオブジェクトを用意
+      self.next_director = EndingDirector.new(
+        screen_width:,
+        screen_height:,
+        renderer:,
+        score: @score
+      )
+
+      # トンネルのシーンの登場オブジェクト群を生成
+      create_objects
+
+      # ボスを生成
+      @boss_enemy = BossEnemy.new(x: 0.0, y: 40.0, z: -100.0)
+      scene.add(@boss_enemy.mesh)
+
+      # 弾丸の詰め合わせ用配列
+      @bullets = []
+
+      # 敵の詰め合わせ用配列
+      @enemies = []
+
+      # 現在のフレーム数をカウントする
+      @frame_counter = 0
+
+      @camera_rotate_x = 0.0
+      @camera_rotate_y = 0.0
     end
 
-    @score = Score.new screen_width, screen_height
-    @clock = Clock.new screen_width, screen_height
-
-    # トンネルのシーンの次に遷移するシーンのディレクターオブジェクトを用意
-    self.next_director = EndingDirector.new(
-      screen_width:,
-      screen_height:,
-      renderer:,
-      score: @score
-    )
-
-    # トンネルのシーンの登場オブジェクト群を生成
-    create_objects
-
-    # ボスを生成
-    @boss_enemy = BossEnemy.new(x: 0.0, y: 40.0, z: -100.0)
-    scene.add(@boss_enemy.mesh)
-
-    # 弾丸の詰め合わせ用配列
-    @bullets = []
-
-    # 敵の詰め合わせ用配列
-    @enemies = []
-
-    # 現在のフレーム数をカウントする
-    @frame_counter = 0
-
-    @camera_rotate_x = 0.0
-    @camera_rotate_y = 0.0
-    end
-
-  # １フレーム分の進行処理
+    # １フレーム分の進行処理
     def play
       if @clock&.expired
         transition_to_next_director
@@ -106,7 +106,7 @@ module Directors
       rejected_enemies.each { |enemy| scene.remove(enemy.mesh) }
 
       # 一定のフレーム数経過毎に規定の数以下なら敵キャラを出現させる
-      if (@frame_counter % 180).zero? && (@enemies.length < @@NUM_MAX_ENEMIES)
+      if (@frame_counter % 180).zero? && (@enemies.length < NUM_MAX_ENEMIES)
         enemy = Enemy.new
         @enemies << enemy
         scene.add(enemy.mesh)
@@ -114,10 +114,10 @@ module Directors
 
       @frame_counter += 1
 
-      camera.rotate_x(@@CAMERA_ROTATE_SPEED_X) if renderer.window.key_down?(GLFW_KEY_UP)
-      camera.rotate_x(-@@CAMERA_ROTATE_SPEED_X) if renderer.window.key_down?(GLFW_KEY_DOWN)
-      camera.rotate_y(@@CAMERA_ROTATE_SPEED_Y) if renderer.window.key_down?(GLFW_KEY_LEFT)
-      camera.rotate_y(-@@CAMERA_ROTATE_SPEED_Y) if renderer.window.key_down?(GLFW_KEY_RIGHT)
+      camera.rotate_x(CAMERA_ROTATE_SPEED_X) if renderer.window.key_down?(GLFW_KEY_UP)
+      camera.rotate_x(-CAMERA_ROTATE_SPEED_X) if renderer.window.key_down?(GLFW_KEY_DOWN)
+      camera.rotate_y(CAMERA_ROTATE_SPEED_Y) if renderer.window.key_down?(GLFW_KEY_LEFT)
+      camera.rotate_y(-CAMERA_ROTATE_SPEED_Y) if renderer.window.key_down?(GLFW_KEY_RIGHT)
 
       @score&.update_points
       @clock&.update_by_frame
@@ -144,7 +144,7 @@ module Directors
       self.predeinitialized = true
     end
 
-  # キー押下（単発）時のハンドリング
+    # キー押下（単発）時のハンドリング
     def on_key_pressed(glfw_key:)
       case glfw_key
 
@@ -185,11 +185,11 @@ module Directors
 
     private
 
-  # トンネルを設置
+    # トンネルを設置
     def create_tunnel(floor: nil)
       cube_map_texture = Mittsu::ImageUtils.load_texture_cube(
         %w[rt lf up dn bk ft].map do |_path|
-          File.join @@DEFAULT_ASSET_DIRECTORY, 'desert.png'
+          File.join DEFAULT_ASSET_DIRECTORY, 'desert.png'
         end
       )
 
@@ -208,9 +208,9 @@ module Directors
 
       @skybox = Mittsu::Mesh.new(
         Mittsu::BoxGeometry.new(
-          @@TONNEL_SHAPE[:width],
-          @@TONNEL_SHAPE[:height],
-          @@TONNEL_SHAPE[:depth]
+          TONNEL_SHAPE[:width],
+          TONNEL_SHAPE[:height],
+          TONNEL_SHAPE[:depth]
         ),
         skybox_material
       )
@@ -229,10 +229,10 @@ module Directors
           Mittsu::BoxGeometry.new(1.0, 1.0, 1.0),
           Mittsu::MeshPhongMaterial.new(
             map: Mittsu::ImageUtils.load_texture(
-              File.join(@@DEFAULT_ASSET_DIRECTORY, 'desert.png')
+              File.join(DEFAULT_ASSET_DIRECTORY, 'desert.png')
             ).tap { |t| set_repeat(t) },
             normal_map: Mittsu::ImageUtils.load_texture(
-              File.join(@@DEFAULT_ASSET_DIRECTORY, 'desert-normal.png')
+              File.join(DEFAULT_ASSET_DIRECTORY, 'desert-normal.png')
             ).tap { |t| set_repeat(t) }
           )
         )

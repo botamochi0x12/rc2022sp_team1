@@ -2,7 +2,7 @@
 class Panel
   attr_accessor :mesh
 
-  def initialize(width: 0.1, height: 0.1, start_frame: 0, duration: 120, map: nil)
+  def initialize(width: 0.1, height: 0.1, start_frame: 0, duration: 120, color: nil, map: nil)
     # オブジェクト誕生時からの経過フレーム数をカウントする
     @count = 0
 
@@ -16,7 +16,7 @@ class Panel
     @len = start_frame + duration
 
     # 平面ジオメトリによるパネルメッシュを生成
-    self.mesh = MeshFactory.create_panel(width:, height:, map:)
+    self.mesh = MeshFactory.create_panel(width:, height:, color:, map:)
 
     # パネルメッシュを裏返しておく
     # ※ 平面ジオメトリ（PlaneGeometry）は、表面しか表示されない特性を利用している
