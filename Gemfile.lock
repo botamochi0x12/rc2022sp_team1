@@ -1,20 +1,30 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    async (2.0.0)
+      console (~> 1.10)
+      io-event (~> 1.0.0)
+      timers (~> 4.1)
     chunky_png (1.4.0)
+    console (1.14.0)
+      fiber-local
     ffi (1.15.5)
     ffi (1.15.5-x64-mingw-ucrt)
+    fiber-local (1.0.0)
+    io-event (1.0.5)
     mittsu (0.3.3)
       chunky_png
       ffi
       opengl-bindings
     opengl-bindings (1.6.12)
+    timers (4.3.3)
 
 PLATFORMS
   x64-mingw-ucrt
   x86_64-darwin-21
 
 DEPENDENCIES
+  async (~> 2.0)
   mittsu (~> 0.3.3)
 
 BUNDLED WITH
