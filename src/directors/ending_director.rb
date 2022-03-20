@@ -22,6 +22,15 @@ module Directors
       )
       @description.mesh.position.z = -0.5
       scene.add(@description.mesh)
+
+      # タイトル画面の背景パネルを作成
+      @background = Panel.new(
+        width: 10, height: 10, start_frame: 0,
+        color: 0x444444
+      )
+      @background.mesh.position.y = 0
+      @background.mesh.position.z = -2
+      scene.add(@background.mesh)
     end
 
     # 1フレーム分の進行処理
@@ -30,6 +39,8 @@ module Directors
 
       # テキスト表示用パネルを1フレーム分アニメーションさせる
       @description.play
+
+      @background&.play
 
       # NOTE: ``score.update_points`` を呼び出す必要はない
     end
