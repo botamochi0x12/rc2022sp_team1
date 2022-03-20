@@ -1,3 +1,4 @@
+require 'async'
 require_relative 'base'
 
 module Directors
@@ -63,12 +64,21 @@ module Directors
       # タイトル文字パネルの初期表示位置（X座標）を定義
       start_x = -0.4
 
+      start = Time.now
       # 1文字1アニメーションパネルとして作成し、
       # 表示開始タイミングを微妙にずらす
-      @panels = %w[u i r s b s t - z].map.with_index do |char, idx|
-        create_title_panel(char, start_x + (idx * 0.1), idx * 2)
+      @panels = []
+      Async do |task|
+        %w[u i r s b s t - z].each_with_index do |char, idx|
+          task.async do
+            puts "Beginning loading #{char} (#{idx})."
+            @panels << create_title_panel(char, start_x + (idx * 0.1), idx * 2)
+            puts "Finished loading #{char} (#{idx})."
+          end
+        end
       end
       @panels.each { |panel| scene.add(panel.mesh) }
+      puts "Duration for loading TitlePanel: #{Time.now - start}"
 
       # 説明文字列用のパネル作成
       # タイトル画面表示開始から180フレーム経過で表示するように調整
